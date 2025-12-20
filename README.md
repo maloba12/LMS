@@ -102,3 +102,148 @@ A comprehensive web-based loan management system built with Next.js, MySQL, and 
 ### Test Customer Account
 - **Email**: mpundu@gmail.com
 - **Password**: (set during registration or by admin)
+
+## Project Structure
+
+```text
+LMS/
+├─ app/                      # Next.js app router pages & layouts
+│  ├─ auth/                  # Login & registration pages
+│  ├─ dashboard/
+│  │  ├─ admin/              # Admin dashboard pages
+│  │  └─ customer/           # Customer dashboard pages
+│  ├─ api/                   # API routes (Next.js serverless functions)
+│  │  ├─ auth/               # Login, logout, register
+│  │  ├─ loans/              # Loan apply, eligibility, my-loan
+│  │  ├─ documents/          # Document listing & uploads
+│  │  ├─ admin/              # Admin-facing APIs (loans, users)
+│  │  └─ customer/           # Customer dashboard aggregate API
+│  ├─ about/                 # About page
+│  ├─ contact/               # Contact page
+│  └─ help/                  # Help / information page
+├─ components/               # Shared React components (sidebars, navbar, etc.)
+├─ lib/                      # Database & auth utilities
+├─ assets/                   # Images and static assets (ERD, screenshots, etc.)
+├─ sql/                      # SQL schema and seed files
+├─ scripts/                  # Helper scripts (e.g. init-db.js)
+├─ uploads/                  # Uploaded CVs and IDs (git-ignored remotely)
+├─ public/ (optional)        # Public static assets
+├─ tailwind.config.ts        # Tailwind CSS configuration
+├─ postcss.config.js         # PostCSS configuration
+├─ tsconfig.json             # TypeScript configuration
+├─ package.json              # npm scripts and dependencies
+└─ README.md                 # Project documentation
+```
+
+## Key Pages & Routes
+
+### Customer
+
+- `/auth/login` – Login page for both customer and admin users.
+- `/auth/register` – Customer registration.
+- `/dashboard/customer` – Customer dashboard overview (profile, docs, loan summary).
+- `/dashboard/customer/apply-loan` – Loan application form with eligibility checks.
+- `/dashboard/customer/my-loan` – Detailed view of latest loan (status, amounts, dates).
+- `/dashboard/customer/profile` – Customer profile and settings.
+- `/dashboard/customer/upload-cv` – Upload CV document.
+- `/dashboard/customer/upload-id` – Upload National ID document.
+
+### Admin
+
+- `/dashboard/admin` – Admin dashboard with stats and recent activity.
+- `/dashboard/admin/loans` – Review, approve, or reject loan applications.
+- `/dashboard/admin/users` – Manage customer users.
+- `/dashboard/admin/documents` – View customer documents.
+- `/dashboard/admin/reports` – System reports and loan statistics.
+
+### Selected API Routes
+
+- `POST /api/auth/login` – Authenticate user and create session cookie.
+- `POST /api/auth/logout` – Destroy session and redirect to `/auth/login`.
+- `POST /api/auth/register` – Register new customer.
+- `POST /api/loans/apply` – Submit new loan application.
+- `GET  /api/loans/eligibility` – Check if customer is eligible to apply.
+- `GET  /api/loans/my-loan` – Get current customer loans.
+- `GET  /api/admin/loans` – Admin list of loan applications.
+- `PATCH /api/admin/loans/[id]` – Approve or reject a loan.
+- `GET  /api/customer/dashboard` – Aggregated customer dashboard data.
+- `GET  /api/documents` – List customer documents.
+- `POST /api/documents/upload` – Upload CV.
+- `POST /api/documents/upload-id` – Upload National ID.
+
+## Running & Development
+
+### Start the Dev Server
+
+```bash
+npm install
+npm run dev
+# App runs at http://localhost:3000
+```
+
+### Database Initialization
+
+You can initialize the schema and seed data with:
+
+```bash
+node scripts/init-db.js
+```
+
+This script will:
+
+- Create required tables (users, customer_profiles, documents, loan_applications, etc.)
+- Insert a default admin account and optional sample data
+
+Always inspect `scripts/init-db.js` before running it against any non-local database.
+
+### Environment Variables
+
+- Local values are stored in `.env.local` (not committed).
+- Ensure the variables match the ones documented in the **Installation** section.
+
+## Security & Production Notes
+
+- Do **not** commit `.env.local`, uploaded ID/CV files, or any secrets.
+- Use a strong `JWT_SECRET` and rotate it if compromised.
+- Limit upload size and validate file types for CV and ID uploads.
+- Serve the app over HTTPS in production.
+- Harden MySQL:
+  - Use a dedicated DB user with least-privilege access.
+  - Avoid exposing MySQL directly to the public internet.
+- Regularly audit admin accounts and user roles.
+
+For production builds:
+
+```bash
+npm run build
+npm start
+```
+
+## Contributing
+
+1. Fork the repository.
+2. Create a feature branch:
+
+   ```bash
+   git checkout -b feature/your-feature-name
+   ```
+
+3. Commit your changes:
+
+   ```bash
+   git commit -m "Add some feature"
+   ```
+
+4. Push the branch and open a Pull Request.
+
+Please ensure before opening a PR:
+
+- TypeScript builds successfully (`npm run lint` / `npm run build` if configured).
+- Pages load without runtime errors.
+- No secrets or sensitive data are added to version control.
+
+## License
+
+This project is currently used for personal/learning purposes.
+
+If you plan to open-source it, add an explicit `LICENSE` file (for example, MIT) and update this section accordingly.
