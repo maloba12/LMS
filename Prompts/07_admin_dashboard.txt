@@ -1,0 +1,93 @@
+ADMIN DASHBOARD & LOAN MANAGEMENT MODULE
+
+OBJECTIVE:
+Implement an admin dashboard that allows authorized admins to manage customers,
+review loan applications, view uploaded CVs, and approve or reject loans.
+
+TARGET USER:
+- Authenticated users with role = 'admin'
+
+ADMIN DASHBOARD PAGE:
+- Path: /dashboard/admin
+- Access: admin only (protected route)
+
+ADMIN FEATURES:
+- View list of all customers
+- View list of all loan applications
+- Filter loan applications by status:
+  - Pending
+  - Approved
+  - Rejected
+- View detailed loan application information
+- View customer uploaded CV
+- Approve or reject loan applications
+- Add optional review comments
+
+PAGES / VIEWS:
+- Admin dashboard overview
+- Loan applications list
+- Loan application detail page
+
+API ROUTES:
+- GET /api/admin/loans
+- GET /api/admin/loans/[id]
+- PATCH /api/admin/loans/[id]
+- GET /api/admin/users
+- GET /api/admin/documents/[loanId]
+
+DATA TO DISPLAY (LOAN DETAILS):
+- Customer name and email
+- Loan amount
+- Loan purpose
+- Loan status
+- Application date
+- CV document link
+- Admin review comments (if any)
+
+ADMIN ACTION FLOW:
+1. Admin logs in
+2. Admin accesses dashboard
+3. Admin selects a loan application
+4. Admin reviews loan details and CV
+5. Admin chooses:
+   - Approve
+   - Reject
+6. Admin adds optional comment
+7. System updates loan status
+8. reviewed_at timestamp is set
+9. Optional record added to admin_actions table
+
+DATABASE OPERATIONS:
+- Fetch all loan applications with user data
+- Update loan_applications.status
+- Update loan_applications.reviewed_at
+- Insert admin action record (if enabled)
+
+BUSINESS RULES:
+- Only loans with status = 'pending' can be reviewed
+- Approved or rejected loans cannot be modified
+- Admin cannot review their own loan (if applicable)
+
+UI BEHAVIOR:
+- Status badges with clear colors
+- Confirmation dialog before approve/reject
+- Disable action buttons after review
+- Show success or error notifications
+
+SECURITY REQUIREMENTS:
+- Enforce admin-only access
+- Validate admin session on every request
+- Ensure admin actions are logged
+- Prevent unauthorized data access
+
+ERROR HANDLING:
+- Loan not found → show error
+- Unauthorized access → 403
+- Invalid status update → block action
+- Server error → generic admin error message
+
+SUCCESS CRITERIA:
+- Admin can view and manage all loan applications
+- Loan approval workflow works correctly
+- Customers see updated loan status
+- System enforces role-based control strictly

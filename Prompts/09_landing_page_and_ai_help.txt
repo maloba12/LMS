@@ -1,0 +1,98 @@
+LANDING PAGE & AI HELP ASSISTANT MODULE
+
+OBJECTIVE:
+Create a clean, professional public-facing landing page for the Loan Management System
+that explains what the system does and allows easy communication through a contact page
+and an AI-powered help assistant.
+
+TARGET USERS:
+- Visitors
+- Potential customers
+- Existing customers seeking help
+- Admin support visibility
+
+LANDING PAGE STRUCTURE:
+
+1. HOME PAGE (/)
+Purpose:
+- First impression of the system
+- Clear explanation of the service
+
+Sections:
+- Hero section with system name and short tagline
+  Example:
+  “Smart, Secure Loan Management Made Simple”
+- Short description of the platform
+- Key features:
+  - Easy customer onboarding
+  - Online loan applications
+  - Secure document uploads
+  - Real-time loan status tracking
+  - Admin approval workflow
+- Call-to-action buttons:
+  - “Apply for a Loan”
+  - “Login”
+  - “Contact Us”
+
+2. ABOUT PAGE (/about)
+Purpose:
+- Explain what the system does and who it is for
+
+Content:
+- Overview of the loan management platform
+- Benefits for customers
+- Benefits for administrators
+- Focus on security, transparency, and speed
+- Simple, professional tone (no marketing exaggeration)
+
+3. CONTACT PAGE (/contact)
+Purpose:
+- Allow users to easily reach out for support
+
+Features:
+- Contact form with:
+  - Full name
+  - Email
+  - Message
+- Basic validation
+- Success / error messages
+- Optional display of support email or phone number
+
+4. HELP / AI ASSISTANT PAGE (/help)
+Purpose:
+- Provide quick assistance without human delay
+
+AI ASSISTANT FEATURES:
+- Simple chat-style interface
+- Answers common questions:
+  - How to apply for a loan
+  - How to upload a CV
+  - How to check loan status
+  - Login or account issues
+- Uses predefined responses (MVP)
+- Can later be extended to real AI APIs
+- Friendly, professional tone
+
+UI & DESIGN REQUIREMENTS:
+- Use Tailwind CSS
+- Clean layout, minimal colors
+- Professional typography
+- Responsive design (mobile & desktop)
+- Consistent navigation bar across all pages:
+  - Home
+  - About
+  - Contact
+  - Help
+  - Login
+
+SECURITY & ACCESS:
+- Landing pages are public
+- Login and dashboards remain protected
+- Contact form input validation required
+
+SUCCESS CRITERIA:
+- Visitors clearly understand what the system does
+- Navigation is simple and intuitive
+- Users can reach support easily
+- AI help assistant improves usability
+- Landing page enhances professional appearance of the project

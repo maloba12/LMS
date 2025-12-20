@@ -1,0 +1,111 @@
+AUTHENTICATION & AUTHORIZATION MODULE
+
+OBJECTIVE: Implement secure authentication and role-based authorization for customers and admins using Next.js App Router and MySQL.
+
+AUTH METHODS:
+
+Email + Password authentication
+
+Passwords must be hashed using bcrypt
+
+Sessions managed via secure HTTP-only cookies or JWT (server-side verification)
+
+USER ROLES:
+
+customer: can access customer dashboard and loan features
+
+admin: can access admin dashboard and management features
+
+PAGES TO IMPLEMENT:
+
+app/auth/login/page.js → Login form (email, password)
+
+app/auth/register/page.js → Customer registration form
+
+API ROUTES:
+
+app/api/auth/register/route.js
+
+app/api/auth/login/route.js
+
+app/api/auth/logout/route.js
+
+app/api/auth/me/route.js (optional: get current user)
+
+REGISTER FLOW:
+
+Validate input (name, email, password)
+
+Check if email already exists
+
+Hash password using bcrypt
+
+Insert user into users table with role='customer'
+
+Return success response
+
+LOGIN FLOW:
+
+Validate input
+
+Fetch user by email
+
+Compare password using bcrypt
+
+Create session or JWT
+
+Set secure cookie
+
+Redirect based on role
+
+customer → /dashboard/customer
+
+admin → /dashboard/admin
+
+LOGOUT FLOW:
+
+Destroy session or clear auth cookie
+
+Redirect to login page
+
+PROTECTED ROUTES:
+
+/dashboard/customer → customer only
+
+/dashboard/admin → admin only
+
+AUTH GUARDS:
+
+Middleware or server-side checks must prevent unauthorized access
+
+If user not authenticated → redirect to /auth/login
+
+If role mismatch → show access denied
+
+SECURITY REQUIREMENTS:
+
+Use prepared statements for SQL queries
+
+Never store plain-text passwords
+
+Use environment variables for secrets
+
+Rate-limit login attempts (basic)
+
+ERROR HANDLING:
+
+Invalid credentials → user-friendly error
+
+Unauthorized access → 403 response
+
+Server errors → generic message
+
+SUCCESS CRITERIA:
+
+Users can register and login securely
+
+Admin and customer dashboards are role-protected
+
+Authentication state persists across refresh
+
+No sensitive data exposed to client

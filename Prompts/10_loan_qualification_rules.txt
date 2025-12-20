@@ -1,0 +1,125 @@
+LOAN QUALIFICATION & ELIGIBILITY RULES MODULE
+
+OBJECTIVE:
+Define and enforce business rules that determine whether a customer
+is eligible to apply for a loan and how loan applications are validated
+before admin review.
+
+APPLIES TO:
+- Customer registration
+- Customer profile completion
+- Loan application process
+- Admin loan review
+
+------------------------------------
+1. BASIC CUSTOMER ELIGIBILITY
+------------------------------------
+A customer must:
+- Be registered and authenticated
+- Have role = "customer"
+- Have a completed profile
+
+Required profile fields:
+- Full name
+- Email address
+- Phone number
+- National ID (NRC)
+- Residential address
+- Employment status
+- Monthly income
+
+If profile is incomplete:
+- Block loan application
+- Show message: "Complete your profile to apply for a loan"
+
+------------------------------------
+2. REQUIRED DOCUMENTS
+------------------------------------
+Before applying for a loan, the customer must upload:
+- CV (mandatory)
+- National ID copy (mandatory)
+- Proof of residence (optional for MVP)
+
+Rules:
+- Allowed formats: PDF, DOC, DOCX
+- Maximum file size: 5MB
+- One active document per type per user
+- Documents must belong to the logged-in user
+
+If required documents are missing:
+- Block loan application
+- Prompt user to upload documents
+
+------------------------------------
+3. LOAN APPLICATION REQUIREMENTS
+------------------------------------
+Required loan fields:
+- Loan amount
+- Loan purpose
+- Repayment period (months)
+- Employment status
+- Monthly income
+- Agreement to terms & conditions
+
+Validation rules:
+- Loan amount must be numeric and positive
+- Minimum loan amount: configurable (e.g. ZMW 500)
+- Maximum loan amount: configurable (e.g. ZMW 50,000)
+- Repayment period must be selected
+- Monthly income must be greater than zero
+
+------------------------------------
+4. BUSINESS LOGIC RULES
+------------------------------------
+- Customer can have ONLY ONE active loan at a time
+- Customer cannot apply if a loan status is "pending" or "approved"
+- Loan amount must not exceed 40–50% of:
+  (monthly income × repayment period)
+- Employment status must not be "unemployed" (configurable rule)
+
+If rule fails:
+- Application is either blocked OR
+- Marked as "pending" with a warning flag (MVP decision allowed)
+
+------------------------------------
+5. LOAN STATUS FLOW
+------------------------------------
+Loan statuses:
+- pending (default)
+- approved
+- rejected
+
+Rules:
+- Only admins can change loan status
+- Customers can only view their own loan status
+- Rejected loans may include admin comments
+- Customers can reapply ONLY after rejection
+
+------------------------------------
+6. ADMIN REVIEW CRITERIA
+------------------------------------
+Admins review:
+- Customer profile completeness
+- Uploaded documents
+- Loan amount vs income
+- Loan purpose
+- Previous loan history (if any)
+
+Admin actions:
+- Approve loan
+- Reject loan with optional comment
+- Action logged in admin_actions table
+
+------------------------------------
+7. SECURITY & VALIDATION
+------------------------------------
+- All validation enforced server-side
+- Prevent duplicate submissions
+- Validate ownership of loan & documents
+- Protect all loan routes by authentication middleware
+
+SUCCESS CRITERIA:
+- Only eligible customers can apply for loans
+- Invalid applications are blocked early
+- Loan process reflects real-world lending rules
+- System behaves predictably and securely

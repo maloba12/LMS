@@ -1,0 +1,101 @@
+PROJECT NAME: Loan Management System (Next.js + MySQL)
+
+PROJECT GOAL: Build a functional loan management web application using Next.js (App Router) and MySQL. The system must support customer onboarding, CV/document upload, loan application submission, loan status tracking, and an admin dashboard for managing users and loan applications.
+
+TECH STACK:
+
+Frontend: Next.js (App Router), React, Tailwind CSS
+
+Backend: Next.js API Routes
+
+Database: MySQL
+
+Authentication: Email + Password (hashed)
+
+File Uploads: Local file storage with DB references
+
+Environment: Linux + MySQL
+
+USER ROLES:
+
+Customer
+
+Admin
+
+CUSTOMER FEATURES:
+
+Register an account
+
+Login securely
+
+Upload CV (PDF/DOC/DOCX only)
+
+Apply for a loan
+
+View loan application status (Pending / Approved / Rejected)
+
+View uploaded documents
+
+ADMIN FEATURES:
+
+Secure admin login
+
+View all registered users
+
+View all loan applications
+
+Filter loans by status
+
+View customer CVs
+
+Approve or reject loan applications
+
+Add optional comments during review
+
+APPLICATION STRUCTURE (Next.js App Router):
+
+app/page.js → Landing page
+
+app/auth/login/page.js → Login page
+
+app/auth/register/page.js → Registration page
+
+app/dashboard/customer/page.js → Customer dashboard
+
+app/dashboard/admin/page.js → Admin dashboard
+
+app/api/auth → Authentication APIs
+
+app/api/loans → Loan CRUD APIs
+
+app/api/users → User management APIs
+
+app/api/upload → File upload APIs
+
+ARCHITECTURE RULES:
+
+Use Server Components for data fetching and DB operations
+
+Use Client Components ("use client") for forms, state, and interactions
+
+Separate concerns: UI logic vs API logic
+
+Use environment variables for DB credentials
+
+SECURITY REQUIREMENTS:
+
+Hash passwords using bcrypt
+
+Validate user input
+
+Restrict file uploads by type and size
+
+Protect admin routes by role-based access
+
+DELIVERABLE:
+
+Functional MVP
+
+Clean project structure
+
+README.md with setup instructions

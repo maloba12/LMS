@@ -1,0 +1,79 @@
+CV / DOCUMENT UPLOAD MODULE
+
+OBJECTIVE:
+Implement secure CV (document) upload functionality for customers.
+The uploaded CV will be linked to the customer and their loan application.
+
+TARGET USER:
+- Authenticated users with role = 'customer'
+
+UPLOAD PAGE / COMPONENT:
+- Integrated into customer dashboard
+- Optional standalone path: /dashboard/customer/upload-cv
+- Access: customer only (protected route)
+
+SUPPORTED FILE TYPES:
+- PDF (.pdf)
+- Microsoft Word (.doc, .docx)
+
+FILE SIZE LIMIT:
+- Maximum 5MB
+
+UPLOAD FLOW:
+1. Customer selects a file
+2. System validates:
+   - File type
+   - File size
+3. System sends file using multipart/form-data
+4. Backend stores file locally in /uploads/cv/
+5. File path and metadata saved in documents table
+6. Success response returned
+7. UI updates to reflect uploaded CV
+
+API ROUTES:
+- POST /api/upload/cv
+- GET /api/documents/my-documents
+
+BACKEND LOGIC:
+- Use server-side code only for file handling
+- Generate unique file names to avoid conflicts
+- Create uploads directory if not existing
+- Store only file path in database, not file binary
+
+DATABASE OPERATIONS:
+- Insert record into documents table:
+  - user_id
+  - loan_id (nullable until loan exists)
+  - file_name
+  - file_path
+  - file_type
+
+BUSINESS RULES:
+- Only one active CV per user
+- New upload replaces previous CV
+- CV must exist before loan application submission
+
+UI BEHAVIOR:
+- Show upload progress or loading state
+- Display uploaded file name
+- Allow re-upload (replace CV)
+- Show warning if unsupported file selected
+
+SECURITY REQUIREMENTS:
+- Authenticate user before upload
+- Validate file MIME type and extension
+- Prevent access to other users’ documents
+- Sanitize file names
+- Prevent directory traversal attacks
+
+ERROR HANDLING:
+- Invalid file type → clear error message
+- File too large → size error message
+- Upload failure → retry option
+- Server error → generic error message
+
+SUCCESS CRITERIA:
+- Customer can upload CV successfully
+- File stored securely on server
+- CV linked correctly to user
+- Loan application blocked if CV missing

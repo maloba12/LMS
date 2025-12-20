@@ -1,0 +1,77 @@
+LOAN APPLICATION MODULE
+
+OBJECTIVE:
+Implement the full loan application workflow for customers, including submission,
+storage, status tracking, and business rules enforcement.
+
+TARGET USER:
+- Authenticated users with role = 'customer'
+
+LOAN APPLICATION PAGE:
+- Path: /dashboard/customer/apply-loan
+- Access: customer only (protected route)
+
+LOAN APPLICATION FORM FIELDS:
+- Loan amount (number, required)
+- Loan purpose (text, required)
+
+FORM VALIDATION RULES:
+- Loan amount must be a positive number
+- Loan purpose must not be empty
+- User must have an uploaded CV before submitting
+- User must not have an active (pending or approved) loan
+
+SUBMISSION FLOW:
+1. Customer fills loan application form
+2. System validates input
+3. System checks:
+   - CV exists for user
+   - No active loan exists
+4. Create loan record with status = 'pending'
+5. Store loan in loan_applications table
+6. Redirect user to customer dashboard
+7. Display loan status as 'Pending'
+
+API ROUTES:
+- POST /api/loans/apply
+- GET /api/loans/my-loan
+- GET /api/loans/status
+
+DATABASE OPERATIONS:
+- Insert new record into loan_applications
+- Fetch loan by user_id
+- Update reviewed_at only when admin reviews
+
+BUSINESS RULES:
+- One active loan per customer at a time
+- Re-application allowed only after rejection
+- Loan status values:
+  - pending
+  - approved
+  - rejected
+
+UI BEHAVIOR:
+- Disable submit button during request
+- Show loading indicator
+- Show success or error messages
+- Display loan details on dashboard:
+  - Amount
+  - Purpose
+  - Status badge
+
+SECURITY REQUIREMENTS:
+- Validate user session on every request
+- Ensure loan data belongs to logged-in user
+- Use prepared SQL statements
+
+ERROR HANDLING:
+- CV missing → show clear message
+- Active loan exists → block submission
+- Invalid input → form-level errors
+- Server error → generic error message
+
+SUCCESS CRITERIA:
+- Customer can successfully submit a loan application
+- Loan appears immediately on dashboard
+- Status tracking works correctly
+- Business rules enforced strictly

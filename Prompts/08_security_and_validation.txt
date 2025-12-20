@@ -1,0 +1,60 @@
+SECURITY & VALIDATION MODULE
+
+OBJECTIVE:
+Implement application-wide security measures and input validation to protect the system
+from unauthorized access, malicious inputs, and common web vulnerabilities.
+
+SCOPE:
+- Applies to all modules: authentication, user onboarding, loan application, CV uploads, admin dashboard
+
+SECURITY MEASURES:
+
+1. AUTHENTICATION & SESSION SECURITY
+- Hash passwords using bcrypt
+- Store sessions in HTTP-only, secure cookies or JWT
+- Set cookie expiration (short-lived) and refresh tokens if needed
+- Protect sensitive API routes with role-based middleware
+- Prevent brute force attacks using rate limiting
+
+2. INPUT VALIDATION
+- Validate all form inputs on both client and server
+- Loan amount: numeric, positive
+- Loan purpose: non-empty text
+- CV upload: file type and size check
+- Registration/login: email format, password minimum length
+- Sanitize inputs to prevent SQL injection or XSS
+
+3. DATABASE SECURITY
+- Use prepared statements for all SQL queries
+- Enforce foreign key constraints
+- Do not expose sensitive fields (password_hash, secrets)
+
+4. FILE UPLOAD SECURITY
+- Validate file MIME type and extension
+- Limit file size (e.g., 5MB)
+- Rename files to avoid conflicts
+- Store files in a safe server directory, outside public root
+- Prevent directory traversal attacks
+
+5. ROUTE & ACCESS CONTROL
+- Protect routes based on user roles (customer vs admin)
+- Redirect unauthorized users to login or access-denied page
+- Validate user ownership on data fetching (cannot access other users’ data)
+
+6. ERROR HANDLING & LOGGING
+- Provide user-friendly error messages
+- Do not expose stack traces or server info
+- Log errors securely for admin review
+
+7. FRONTEND SECURITY BEST PRACTICES
+- Escape any user-generated content before rendering
+- Avoid storing sensitive data in localStorage
+- Use HTTPS for production deployment
+
+SUCCESS CRITERIA:
+- All forms and API endpoints validate input correctly
+- Users cannot access unauthorized routes
+- Passwords and sensitive data never exposed
+- Uploaded files cannot compromise server
+- Admin actions logged and secure
+- System resistant to SQL injection, XSS, and common attacks

@@ -1,0 +1,63 @@
+USER ONBOARDING MODULE (CUSTOMER)
+
+OBJECTIVE:
+Implement customer onboarding after authentication. This module handles customer profile setup,
+basic user information display, and prepares the customer for loan application.
+
+TARGET USER:
+- Authenticated users with role = 'customer'
+
+ONBOARDING FLOW:
+1. User registers or logs in
+2. User is redirected to customer dashboard
+3. System checks if user profile exists
+4. If first-time login, show onboarding state
+5. User can proceed to apply for a loan
+
+CUSTOMER DASHBOARD PAGE:
+- Path: /dashboard/customer
+- Access: customer only (protected route)
+
+DASHBOARD FEATURES:
+- Display customer full name and email
+- Display onboarding message (welcome message)
+- Show current loan application status (if any)
+- Button to:
+  - Apply for a new loan
+  - Upload CV (if not uploaded)
+  - View loan details
+
+DATA TO FETCH (SERVER-SIDE):
+- User basic details (from users table)
+- Existing loan application (if any)
+- Uploaded documents (CV)
+
+API ROUTES USED:
+- GET /api/users/me
+- GET /api/loans/my-loan
+- GET /api/documents/my-documents
+
+BUSINESS RULES:
+- A customer can have only ONE active loan application at a time
+- If a loan is pending or approved, hide “Apply for Loan” button
+- If rejected, allow re-application
+- CV must be uploaded before loan submission
+
+UI BEHAVIOR:
+- If no CV uploaded → show warning + upload button
+- If no loan applied → show “Apply for Loan”
+- If loan exists → show status badge:
+  - Pending
+  - Approved
+  - Rejected
+
+SECURITY REQUIREMENTS:
+- Ensure user can only access their own data
+- Validate user session before data fetching
+- Never expose password or sensitive fields
+
+SUCCESS CRITERIA:
+- Customer sees personalized dashboard
+- Correct onboarding flow for first-time users
+- Clear guidance on next steps (upload CV, apply for loan)
+- No unauthorized access to other users’ data

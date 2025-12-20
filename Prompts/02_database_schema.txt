@@ -1,0 +1,91 @@
+DATABASE NAME: loan_management_system
+
+DATABASE ENGINE: MySQL
+
+TABLES AND STRUCTURE:
+
+TABLE: users
+
+id (INT, PRIMARY KEY, AUTO_INCREMENT)
+
+full_name (VARCHAR(100), NOT NULL)
+
+email (VARCHAR(100), UNIQUE, NOT NULL)
+
+password_hash (VARCHAR(255), NOT NULL)
+
+role (ENUM('customer','admin'), DEFAULT 'customer')
+
+created_at (TIMESTAMP, DEFAULT CURRENT_TIMESTAMP)
+
+updated_at (TIMESTAMP, DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP)
+
+TABLE: loan_applications
+
+id (INT, PRIMARY KEY, AUTO_INCREMENT)
+
+user_id (INT, FOREIGN KEY REFERENCES users(id))
+
+loan_amount (DECIMAL(10,2), NOT NULL)
+
+loan_purpose (TEXT, NOT NULL)
+
+status (ENUM('pending','approved','rejected'), DEFAULT 'pending')
+
+applied_at (TIMESTAMP, DEFAULT CURRENT_TIMESTAMP)
+
+reviewed_at (TIMESTAMP, NULL)
+
+
+TABLE: documents
+
+id (INT, PRIMARY KEY, AUTO_INCREMENT)
+
+user_id (INT, FOREIGN KEY REFERENCES users(id))
+
+loan_id (INT, FOREIGN KEY REFERENCES loan_applications(id))
+
+file_name (VARCHAR(255), NOT NULL)
+
+file_path (VARCHAR(255), NOT NULL)
+
+file_type (VARCHAR(50), NOT NULL)
+
+uploaded_at (TIMESTAMP, DEFAULT CURRENT_TIMESTAMP)
+
+updated_at (TIMESTAMP, DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP)
+
+TABLE: admin_actions (OPTIONAL BUT RECOMMENDED)
+
+id (INT, PRIMARY KEY, AUTO_INCREMENT)
+
+admin_id (INT, FOREIGN KEY REFERENCES users(id))
+
+loan_id (INT, FOREIGN KEY REFERENCES loan_applications(id))
+
+action (ENUM('approved','rejected'))
+
+comment (TEXT)
+
+action_date (TIMESTAMP, DEFAULT CURRENT_TIMESTAMP)
+
+RELATIONSHIPS (FOR LUCIDCHART):
+
+users 1 → many loan_applications
+
+users 1 → many documents
+
+loan_applications 1 → many documents
+
+users (admin) 1 → many admin_actions
+
+DESIGN NOTES:
+
+Use proper indexing on foreign keys
+
+Enforce referential integrity
+
+Status fields control business logic
+
+This schema supports MVP and future expansion
+
