@@ -47,7 +47,7 @@ export default function FloatingChatWidget() {
         // AI Response logic
         setTimeout(() => {
             const lowerMessage = userMessage.toLowerCase();
-            let response = "I'm sorry, I don't quite understand that yet. You can ask about applying for loans, uploading documents, or checking your application status.";
+            let response = "I apologize, but I don't have the answer to that specific question right now. However, our support team would be happy to assist you! Please reach out to our customer care at support@lms-example.com or call +1 (555) 000-0000 for immediate assistance.";
 
             for (const [key, val] of Object.entries(FAQ_RESPONSES)) {
                 if (lowerMessage.includes(key)) {

@@ -70,7 +70,7 @@ export default function ContactSection() {
                                     </div>
                                     <div>
                                         <p className="text-sm text-blue-200">Email</p>
-                                        <p className="font-semibold text-lg">support@lms-example.com</p>
+                                        <p className="font-semibold text-lg">customer-support@lms.com</p>
                                     </div>
                                 </div>
 
@@ -82,7 +82,7 @@ export default function ContactSection() {
                                     </div>
                                     <div>
                                         <p className="text-sm text-blue-200">Phone</p>
-                                        <p className="font-semibold text-lg">+1 (555) 000-0000</p>
+                                        <p className="font-semibold text-lg">+255 712 345 678</p>
                                     </div>
                                 </div>
                             </div>
