@@ -40,7 +40,7 @@ export async function GET() {
             [session.userId]
         );
         const docTypes = new Set(documents.map((d: any) => d.doc_type));
-        const docs = { cv: docTypes.has('cv'), id: docTypes.has('id') };
+        const docs = { payslip: docTypes.has('payslip'), id: docTypes.has('id') };
 
         await connection.commit();
 

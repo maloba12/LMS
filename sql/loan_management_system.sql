@@ -32,6 +32,7 @@ CREATE TABLE documents (
     file_name VARCHAR(255) NOT NULL,
     file_path VARCHAR(255) NOT NULL,
     file_type VARCHAR(50) NOT NULL,
+    doc_type ENUM('cv', 'payslip', 'id', 'other') DEFAULT 'other',
     uploaded_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     CONSTRAINT fk_doc_user FOREIGN KEY (user_id) REFERENCES users(id),

@@ -41,15 +41,15 @@ export async function GET() {
             checks.push({ ok: false, message: 'Complete your profile to apply for a loan' });
         }
 
-        // 2. Required documents (CV and ID)
+        // 2. Required documents (Payslip and ID)
         try {
             const [docs] = await pool.query<RowDataPacket[]>(
                 'SELECT doc_type FROM documents WHERE user_id = ?',
                 [session.userId]
             );
             const docTypes = new Set(docs.map((d: any) => d.doc_type));
-            if (!docTypes.has('cv')) checks.push({ ok: false, message: 'Upload your CV before applying' });
-            else checks.push({ ok: true, message: 'CV uploaded' });
+            if (!docTypes.has('payslip')) checks.push({ ok: false, message: 'Upload your latest Payslip before applying' });
+            else checks.push({ ok: true, message: 'Payslip uploaded' });
             if (!docTypes.has('id')) checks.push({ ok: false, message: 'Upload your National ID before applying' });
             else checks.push({ ok: true, message: 'National ID uploaded' });
         } catch (err) {

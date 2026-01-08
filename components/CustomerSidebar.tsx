@@ -18,7 +18,7 @@ const menuItems = [
     { name: 'Dashboard', href: '/dashboard/customer', icon: LayoutDashboard },
     { name: 'Apply for Loan', href: '/dashboard/customer/apply-loan', icon: FileText },
     { name: 'My Loan Status', href: '/dashboard/customer/my-loan', icon: ClipboardList },
-    { name: 'Upload CV', href: '/dashboard/customer/upload-cv', icon: Upload },
+    { name: 'Document Uploads', href: '/dashboard/customer/uploads', icon: Upload },
     { name: 'Profile / Settings', href: '/dashboard/customer/profile', icon: Settings },
 ];
 

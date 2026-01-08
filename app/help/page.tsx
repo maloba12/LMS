@@ -9,17 +9,17 @@ interface Message {
 }
 
 const FAQ_RESPONSES: Record<string, string> = {
-    'how to apply': 'Applying for a loan is easy! First, ensure you have uploaded your CV in the "Upload CV" section of your dashboard. Then, head over to "Apply for a Loan", fill in the amount and purpose, and submit.',
-    'apply for a loan': 'Applying for a loan is easy! First, ensure you have uploaded your CV in the "Upload CV" section of your dashboard. Then, head over to "Apply for a Loan", fill in the amount and purpose, and submit.',
-    'how to upload a cv': 'To upload your CV, log in to your dashboard and look for the "Upload CV" button. We support PDF and Word documents up to 5MB.',
-    'upload cv': 'To upload your CV, log in to your dashboard and look for the "Upload CV" button. We support PDF and Word documents up to 5MB.',
+    'how to apply': 'Applying for a loan is easy! First, ensure you have uploaded your Payslip in the "Upload Payslip" section of your dashboard. Then, head over to "Apply for a Loan", fill in the amount and purpose, and submit.',
+    'apply for a loan': 'Applying for a loan is easy! First, ensure you have uploaded your Payslip in the "Upload Payslip" section of your dashboard. Then, head over to "Apply for a Loan", fill in the amount and purpose, and submit.',
+    'how to upload a payslip': 'To upload your Payslip, log in to your dashboard and look for the "Upload Payslip" button. We support PDF, JPG, and PNG documents up to 5MB.',
+    'upload payslip': 'To upload your Payslip, log in to your dashboard and look for the "Upload Payslip" button. We support PDF, JPG, and PNG documents up to 5MB.',
     'how to check loan status': 'You can track your application in real-time on your Customer Dashboard. The status will update from PENDING to APPROVED or REJECTED once a system admin reviews it.',
     'check status': 'You can track your application in real-time on your Customer Dashboard. The status will update from PENDING to APPROVED or REJECTED once a system admin reviews it.',
     'login issues': 'If you are having trouble logging in, please check your credentials. If the problem persists, ensure your account is registered. For further help, use our Contact Support page.',
     'access issues': 'If you are having trouble logging in, please check your credentials. If the problem persists, ensure your account is registered. For further help, use our Contact Support page.',
-    'hello': 'Hello! I am your LMS Assistant. I can help you with questions about loan applications, CV uploads, and status tracking. How can I assist you?',
-    'hi': 'Hi! I am your LMS Assistant. I can help you with questions about loan applications, CV uploads, and status tracking. How can I assist you?',
-    'help': 'I can assist you with: \n1. How to apply for a loan\n2. How to upload a CV\n3. Checking loan status\n4. Login and access issues.',
+    'hello': 'Hello! I am your LMS Assistant. I can help you with questions about loan applications, Payslip uploads, and status tracking. How can I assist you?',
+    'hi': 'Hi! I am your LMS Assistant. I can help you with questions about loan applications, Payslip uploads, and status tracking. How can I assist you?',
+    'help': 'I can assist you with: \n1. How to apply for a loan\n2. How to upload a Payslip\n3. Checking loan status\n4. Login and access issues.',
 };
 
 export default function HelpPage() {
@@ -107,7 +107,7 @@ export default function HelpPage() {
 
                 <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div className="p-4 bg-blue-50 rounded-xl text-sm text-blue-800">
-                        <strong>Pro Tip:</strong> Try asking "How do I apply for a loan?" or "Where do I upload my CV?"
+                        <strong>Pro Tip:</strong> Try asking "How do I apply for a loan?" or "Where do I upload my Payslip?"
                     </div>
                     <div className="p-4 bg-slate-100 rounded-xl text-sm text-slate-800">
                         <strong>Need a human?</strong> Visit our <a href="/contact" className="text-blue-600 font-bold hover:underline">Contact Page</a>.

@@ -46,6 +46,9 @@ export default async function AdminDocumentsPage() {
                                 <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest bg-gray-50 px-2 py-1 rounded">
                                     ID: {doc.id}
                                 </span>
+                                <span className={`text-[10px] font-bold uppercase tracking-widest px-2 py-1 rounded ml-2 ${doc.doc_type === 'payslip' ? 'bg-green-50 text-green-600' : doc.doc_type === 'id' ? 'bg-purple-50 text-purple-600' : 'bg-gray-50 text-gray-400'}`}>
+                                    {doc.doc_type || 'DOC'}
+                                </span>
                             </div>
                             <h3 className="font-bold text-gray-900 truncate mb-1" title={doc.file_name}>
                                 {doc.file_name}

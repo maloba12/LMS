@@ -48,16 +48,16 @@ export async function POST(request: Request) {
             return NextResponse.json({ error: 'Complete your profile before applying for a loan' }, { status: 400 });
         }
 
-        // 2. Required documents (CV and ID)
+        // 2. Required documents (Payslip and ID)
         const [docs] = await connection.query<RowDataPacket[]>(
             'SELECT doc_type FROM documents WHERE user_id = ?',
             [session.userId]
         );
         const docTypes = new Set(docs.map((d: any) => d.doc_type));
-        if (!docTypes.has('cv') || !docTypes.has('id')) {
+        if (!docTypes.has('payslip') || !docTypes.has('id')) {
             await connection.rollback();
             console.error('Documents check failed. Found docTypes:', Array.from(docTypes), 'Docs:', docs);
-            return NextResponse.json({ error: 'Upload both CV and National ID before applying' }, { status: 400 });
+            return NextResponse.json({ error: 'Upload both latest Payslip and National ID before applying' }, { status: 400 });
         }
 
         // 3. Active loan check (prevent duplicate)

@@ -21,10 +21,11 @@ async function getLoans() {
       l.affordability_ratio,
       l.max_affordable_amount,
       l.status,
-      l.applied_at,
       l.reviewed_at,
       u.full_name,
-      u.email
+      u.email,
+      (SELECT file_path FROM documents WHERE user_id = l.user_id AND doc_type = 'payslip' ORDER BY uploaded_at DESC LIMIT 1) as payslip_path,
+      (SELECT file_name FROM documents WHERE user_id = l.user_id AND doc_type = 'payslip' ORDER BY uploaded_at DESC LIMIT 1) as payslip_name
     FROM loan_applications l
     JOIN users u ON l.user_id = u.id
     ORDER BY l.applied_at DESC
@@ -98,7 +99,7 @@ export default async function AdminDashboard() {
                         </Link>
                         <Link href="/dashboard/admin/documents" className="p-4 bg-gray-50 rounded-2xl hover:bg-green-50 transition-colors group">
                             <p className="font-bold text-gray-900 group-hover:text-green-600">View Documents</p>
-                            <p className="text-xs text-gray-500 mt-1">CVs and supporting files</p>
+                            <p className="text-xs text-gray-500 mt-1">Payslips and supporting files</p>
                         </Link>
                         <Link href="/dashboard/admin/reports" className="p-4 bg-gray-50 rounded-2xl hover:bg-orange-50 transition-colors group">
                             <p className="font-bold text-gray-900 group-hover:text-orange-600">System Reports</p>

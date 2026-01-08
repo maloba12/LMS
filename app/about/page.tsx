@@ -20,7 +20,7 @@ export default function AboutPage() {
                                 <h3 className="font-bold text-lg mb-2 text-blue-600">For Customers</h3>
                                 <ul className="list-disc list-inside space-y-2">
                                     <li>Quick and easy registration</li>
-                                    <li>Online document (CV) submission</li>
+                                    <li>Online document (Payslip) submission</li>
                                     <li>Simple application process</li>
                                     <li>Real-time status tracking</li>
                                 </ul>

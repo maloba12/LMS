@@ -65,9 +65,9 @@ export default function LoanList({ loans }: { loans: any[] }) {
                             <p className="mt-1 text-sm text-gray-600">Purpose: {loan.loan_purpose}</p>
                             <div className="mt-2 text-sm text-gray-500">
                                 Applied: {new Date(loan.applied_at).toLocaleDateString()}
-                                {loan.cv_path && (
-                                    <a href={loan.cv_path} target="_blank" rel="noopener noreferrer" className="ml-4 text-blue-600 hover:underline">
-                                        View CV ({loan.cv_name})
+                                {loan.payslip_path && (
+                                    <a href={loan.payslip_path} target="_blank" rel="noopener noreferrer" className="ml-4 text-blue-600 hover:underline">
+                                        View Payslip ({loan.payslip_name})
                                     </a>
                                 )}
                             </div>

@@ -1,5 +1,5 @@
 node_modules
 .next/
-uploads/
+/uploads/
 .env.local
 tsconfig.tsbuildinfo

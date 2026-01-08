@@ -1,0 +1,33 @@
+Title: Replace CV Upload With Payslip Upload in Loan Application Workflow
+
+Objective:
+Modify the existing Loan Management System to replace the "Upload CV" requirement with a "Upload Payslip" requirement during loan application. The payslip will be used to validate income, repayment ability, and employment details.
+
+Scope of Work:
+1. Remove all CV-upload related fields, validations, API references, database columns, labels, and UI text.
+2. Introduce a new "Payslip Upload" component supporting PDF, PNG, and JPEG formats.
+3. Add validation rules:
+   - Maximum file size: 5MB
+   - Allowed formats: PDF, JPG, JPEG, PNG
+   - Prevent empty submission
+4. Backend Requirements:
+   - Create/modify file storage path for payslips
+   - Update loan application model to store payslip metadata (filename, path, size, MIME type, upload timestamp)
+   - Ensure secure storage and access control with role-based permissions
+5. UI Requirements:
+   - Replace “Upload CV” label with “Upload Latest Payslip (last 3 months preferred)”
+   - Add tooltip: “Your payslip is used to assess affordability and eligibility.”
+6. Security & Compliance:
+   - Encrypt stored file references
+   - Ensure payslip cannot be downloaded by other users
+   - Mask sensitive identifiers when previewing
+7. Impacted Areas:
+   - Loan Application Form
+   - Application Review Page (Admin and Vendor)
+   - Database schema
+   - API endpoints for document upload
+8. Acceptance Criteria:
+   - CV option fully removed from all modules
+   - Payslip successfully uploaded and linked to loan application
+   - Attempting to submit without payslip triggers validation error
+   - Admin/vendor can view payslip document securely

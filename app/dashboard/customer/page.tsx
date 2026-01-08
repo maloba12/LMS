@@ -32,7 +32,7 @@ export default function CustomerDashboard() {
     const [user, setUser] = useState<User | null>(null);
     const [profile, setProfile] = useState<Profile | null>(null);
     const [loan, setLoan] = useState<Loan | null>(null);
-    const [docs, setDocs] = useState<{ cv: boolean; id: boolean }>({ cv: false, id: false });
+    const [docs, setDocs] = useState<{ payslip: boolean; id: boolean }>({ payslip: false, id: false });
     const [error, setError] = useState('');
     const router = useRouter();
 
@@ -53,7 +53,7 @@ export default function CustomerDashboard() {
     }, []);
 
     const profileComplete = profile && profile.phone_number && profile.national_id && profile.residential_address && profile.employment_status && profile.monthly_income;
-    const canApply = profileComplete && docs.cv && docs.id && !loan;
+    const canApply = profileComplete && docs.payslip && docs.id && !loan;
 
     if (error) return <div className="min-h-screen bg-gray-50 flex items-center justify-center"><p className="text-red-500">{error}</p></div>;
     if (!user) return <div className="min-h-screen bg-gray-50 flex items-center justify-center"><p>Loading...</p></div>;
@@ -94,14 +94,14 @@ export default function CustomerDashboard() {
                     <div className="bg-white overflow-hidden shadow rounded-lg p-6">
                         <h3 className="text-lg font-medium text-gray-900 mb-2">Documents</h3>
                         <div className="space-y-2 text-sm">
-                            <div className={docs.cv ? 'text-green-600' : 'text-red-600'}>
-                                CV: {docs.cv ? 'Uploaded' : 'Not uploaded'}
+                            <div className={docs.payslip ? 'text-green-600' : 'text-red-600'}>
+                                Payslip: {docs.payslip ? 'Uploaded' : 'Not uploaded'}
                             </div>
                             <div className={docs.id ? 'text-green-600' : 'text-red-600'}>
                                 National ID: {docs.id ? 'Uploaded' : 'Not uploaded'}
                             </div>
                             {!docs.id && (
-                                <Link href="/dashboard/customer/upload-id" className="text-blue-600 hover:text-blue-800 text-sm font-medium">
+                                <Link href="/dashboard/customer/uploads/id" className="text-blue-600 hover:text-blue-800 text-sm font-medium">
                                     Upload ID
                                 </Link>
                             )}
