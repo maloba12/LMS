@@ -26,6 +26,8 @@ interface Loan {
     status: 'pending' | 'approved' | 'rejected';
     applied_at: string;
     reviewed_at?: string;
+    vendor_name?: string;
+    product_name?: string;
 }
 
 export default function CustomerDashboard() {
@@ -126,6 +128,16 @@ export default function CustomerDashboard() {
                                             }`}>
                                             {loan.status.toUpperCase()}
                                         </span>
+                                    </div>
+                                </div>
+                                <div className="grid grid-cols-2 gap-4 mb-4">
+                                    <div>
+                                        <span className="text-sm text-gray-500">Lender</span>
+                                        <p className="text-sm font-bold text-gray-900">{loan.vendor_name || 'System Default'}</p>
+                                    </div>
+                                    <div>
+                                        <span className="text-sm text-gray-500">Product</span>
+                                        <p className="text-sm font-bold text-gray-900">{loan.product_name || 'Standard Loan'}</p>
                                     </div>
                                 </div>
                                 <div className="mb-4">

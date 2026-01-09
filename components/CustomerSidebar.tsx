@@ -10,12 +10,14 @@ import {
     Settings,
     LogOut,
     Menu,
-    X
+    X,
+    ShoppingBag
 } from 'lucide-react';
 import { useState } from 'react';
 
 const menuItems = [
     { name: 'Dashboard', href: '/dashboard/customer', icon: LayoutDashboard },
+    { name: 'Explore Marketplace', href: '/marketplace', icon: ShoppingBag },
     { name: 'Apply for Loan', href: '/dashboard/customer/apply-loan', icon: FileText },
     { name: 'My Loan Status', href: '/dashboard/customer/my-loan', icon: ClipboardList },
     { name: 'Document Uploads', href: '/dashboard/customer/uploads', icon: Upload },

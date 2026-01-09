@@ -1,28 +1,44 @@
+'use client';
+
+import { useState } from 'react';
 import Navbar from '@/components/Navbar';
-import HeroSection from '@/components/sections/HeroSection';
-import AboutSection from '@/components/sections/AboutSection';
-import ContactSection from '@/components/sections/ContactSection';
+import Hero from '@/components/sections/Hero';
+import Features from '@/components/sections/Features';
+import Lenders from '@/components/sections/Lenders';
+import Services from '@/components/sections/Services';
+import Stats from '@/components/sections/Stats';
+import HowItWorks from '@/components/sections/HowItWorks';
+import Trust from '@/components/sections/Trust';
+import FAQ from '@/components/sections/FAQ';
+import Footer from '@/components/sections/Footer';
 import FloatingChatWidget from '@/components/FloatingChatWidget';
 
 export default function Home() {
+    const [searchQuery, setSearchQuery] = useState('');
+    const [loanType, setLoanType] = useState('All');
+
     return (
-        <div className="min-h-screen bg-white">
+        <div className="min-h-screen bg-white transition-colors duration-300">
             <Navbar />
             
             <main>
-                <HeroSection />
-                <AboutSection />
-                <ContactSection />
+                <Hero 
+                    searchQuery={searchQuery} 
+                    setSearchQuery={setSearchQuery}
+                    loanType={loanType}
+                    setLoanType={setLoanType}
+                />
+                <Features />
+                <Lenders searchQuery={searchQuery} loanType={loanType} />
+                <Services />
+                <Stats />
+                <HowItWorks />
+                <Trust />
+                <FAQ />
             </main>
 
+            <Footer />
             <FloatingChatWidget />
-
-            {/* Footer */}
-            <footer className="py-12 border-t border-slate-100 bg-white relative z-10">
-                <div className="container mx-auto px-4 text-center">
-                    <p className="text-slate-500 text-sm">© 2025 Loan Management System. All rights reserved.</p>
-                </div>
-            </footer>
         </div>
     );
 }

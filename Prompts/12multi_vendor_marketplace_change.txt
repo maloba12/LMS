@@ -1,0 +1,56 @@
+Title: Transform Loan Management System into Multi-Vendor Loan Marketplace (Zambia-Focused)
+
+Objective:
+Extend the current Loan Management System into a multi-vendor loan marketplace where users can discover, compare, review, and onboard with different loan providers operating in Zambia.
+
+Marketplace Description:
+The platform will enable users to:
+- Search loan companies in Zambia
+- View vendor profiles and loan products
+- Compare loan terms, interest rates, and eligibility
+- Submit loan applications directly to selected vendor
+- Review companies and their offers
+
+Core Requirements:
+
+1. Vendor Onboarding Module:
+   - Vendor registration workflow
+   - KYC verification for Zambian companies
+   - Company profile (name, logo, description, license number, contact, location, website)
+   - Product listing management (loan types, interest rate, tenure, minimum income, fees)
+
+2. Vendor Types to Support:
+   - Banks
+   - Microfinance institutions
+   - Digital lenders
+   - SACCOs (cooperatives)
+
+3. Zambian Context Requirements:
+   - Currency: ZMW
+   - Interest formats commonly used in Zambia
+   - Fields for PACRA registration number and Bank of Zambia license reference
+   - Support popular Zambian contact formats (mobile numbers and email)
+   - Localization for Zambian terms (e.g., "salary advance", "SME loan")
+
+4. User Features:
+   - Company search and filtering (by rate, tenure, type, location)
+   - View vendor ratings and reviews
+   - Compare multiple offers side-by-side
+   - Apply directly to vendor via system onboarding
+
+5. Admin Features:
+   - Approve/decline vendor onboarding applications
+   - Monitor loan products being listed
+   - Moderate reviews and complaints
+
+6. Technical Requirements:
+   - Multi-tenant architecture separation per vendor
+   - Vendor-specific dashboards
+   - Role-based permissions (Admin, Vendor Admin, Loan Officer, User)
+   - Scalable schema to support many vendors
+
+7. Acceptance Criteria:
+   - Users can discover multiple Zambian loan companies
+   - Vendors can register and onboard
+   - Users can compare loan offers
+   - Loan applications can be routed to chosen vendor

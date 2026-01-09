@@ -1,9 +1,22 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { useState, useEffect, Suspense } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { Building2, Package } from 'lucide-react';
+import { Vendor, LoanProduct } from '@/types/marketplace';
 
 export default function ApplyLoanPage() {
+    return (
+        <Suspense fallback={<div>Loading...</div>}>
+            <ApplyLoanForm />
+        </Suspense>
+    );
+}
+
+function ApplyLoanForm() {
+    const searchParams = useSearchParams();
+    const router = useRouter();
+    
     const [form, setForm] = useState({
         amount: '',
         purpose: '',
@@ -11,19 +24,51 @@ export default function ApplyLoanPage() {
         declared_employment_status: '',
         declared_monthly_income: '',
         terms_accepted: false,
+        vendor_id: searchParams.get('vendor_id') || '',
+        loan_product_id: searchParams.get('product_id') || '',
     });
     const [eligibility, setEligibility] = useState<any>(null);
+    const [vendors, setVendors] = useState<Vendor[]>([]);
+    const [products, setProducts] = useState<LoanProduct[]>([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
     const [success, setSuccess] = useState(false);
-    const router = useRouter();
 
     useEffect(() => {
+        // Fetch vendors
+        fetch('/api/vendors')
+            .then(r => r.json())
+            .then(data => {
+                if (Array.isArray(data)) setVendors(data);
+                else setVendors([]);
+            })
+            .catch(err => {
+                console.error(err);
+                setVendors([]);
+            });
+
         fetch('/api/loans/eligibility')
             .then((r) => r.json())
             .then(setEligibility)
             .catch(() => setEligibility({ eligible: false, checks: [{ ok: false, message: 'Could not verify eligibility' }] }));
     }, []);
+
+    useEffect(() => {
+        if (form.vendor_id) {
+            fetch(`/api/products?vendor_id=${form.vendor_id}`)
+                .then(r => r.json())
+                .then(data => {
+                    if (Array.isArray(data)) setProducts(data);
+                    else setProducts([]);
+                })
+                .catch(err => {
+                    console.error(err);
+                    setProducts([]);
+                });
+        } else {
+            setProducts([]);
+        }
+    }, [form.vendor_id]);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
         const { name, value, type } = e.target;
@@ -49,6 +94,8 @@ export default function ApplyLoanPage() {
                     declared_employment_status: form.declared_employment_status,
                     declared_monthly_income: parseFloat(form.declared_monthly_income),
                     terms_accepted: form.terms_accepted,
+                    vendor_id: form.vendor_id ? parseInt(form.vendor_id) : null,
+                    loan_product_id: form.loan_product_id ? parseInt(form.loan_product_id) : null,
                 }),
             });
 
@@ -102,7 +149,45 @@ export default function ApplyLoanPage() {
 
                 {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
 
-                <form onSubmit={handleSubmit} className="space-y-4">
+                <form onSubmit={handleSubmit} className="space-y-6">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 p-4 bg-gray-50 rounded-xl border border-gray-100 mb-6">
+                        <div>
+                            <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2 flex items-center gap-2">
+                                <Building2 className="w-4 h-4" /> Select Lender
+                            </label>
+                            <select
+                                name="vendor_id"
+                                value={form.vendor_id}
+                                onChange={handleChange}
+                                className="w-full rounded-lg border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500 border p-2 text-sm text-black"
+                            >
+                                <option value="">Global Application (Any Lender)</option>
+                                {Array.isArray(vendors) && vendors.map(v => (
+                                    <option key={v.id} value={v.id}>{v.name}</option>
+                                ))}
+                            </select>
+                        </div>
+
+                        <div>
+                            <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2 flex items-center gap-2">
+                                <Package className="w-4 h-4" /> Select Product
+                            </label>
+                            <select
+                                name="loan_product_id"
+                                value={form.loan_product_id}
+                                onChange={handleChange}
+                                className="w-full rounded-lg border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500 border p-2 text-sm text-black"
+                                disabled={!form.vendor_id}
+                            >
+                                <option value="">General Purpose Loan</option>
+                                {Array.isArray(products) && products.map(p => (
+                                    <option key={p.id} value={p.id}>{p.name} ({p.interest_rate}%)</option>
+                                ))}
+                            </select>
+                        </div>
+                    </div>
+
+                    <div className="space-y-4">
                     <div>
                         <label className="block text-sm font-medium text-gray-700">Loan Amount (K)</label>
                         <input
@@ -184,6 +269,7 @@ export default function ApplyLoanPage() {
                         <label className="ml-2 block text-sm text-gray-900">
                             I agree to the terms and conditions
                         </label>
+                    </div>
                     </div>
                     <div className="flex justify-end gap-2">
                         <button

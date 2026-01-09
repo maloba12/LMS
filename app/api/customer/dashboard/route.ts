@@ -29,7 +29,12 @@ export async function GET() {
 
         // 2. Loan data
         const [loans] = await connection.query<RowDataPacket[]>(
-            'SELECT * FROM loan_applications WHERE user_id = ? ORDER BY applied_at DESC LIMIT 1',
+            `SELECT la.*, v.name as vendor_name, lp.name as product_name
+             FROM loan_applications la
+             LEFT JOIN vendors v ON la.vendor_id = v.id
+             LEFT JOIN loan_products lp ON la.loan_product_id = lp.id
+             WHERE la.user_id = ? 
+             ORDER BY la.applied_at DESC LIMIT 1`,
             [session.userId]
         );
         const loan = loans[0] || null;
