@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { 
     Check, 
@@ -19,35 +19,63 @@ export default function VendorApprovalTable({ vendors }: VendorApprovalTableProp
     const router = useRouter();
     const [loading, setLoading] = useState<number | null>(null);
     const [searchTerm, setSearchTerm] = useState('');
+    const [subscriptionPlans, setSubscriptionPlans] = useState<any[]>([]);
+    const [modalOpen, setModalOpen] = useState(false);
+    const [modalAction, setModalAction] = useState<{ vendorId: number; status: 'approved' | 'rejected'; vendorName: string } | null>(null);
+
+    // Load subscription plans for display
+    useEffect(() => {
+        const loadPlans = async () => {
+            try {
+                const res = await fetch('/api/subscription/plans');
+                if (res.ok) {
+                    const data = await res.json();
+                    setSubscriptionPlans(data);
+                }
+            } catch (err) {
+                console.error('Failed to load plans');
+            }
+        };
+        loadPlans();
+    }, []);
 
     const filteredVendors = vendors.filter(v => 
         v.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
         v.pacra_number?.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
-    async function handleAction(vendorId: number, status: 'approved' | 'rejected') {
-        if (!confirm(`Are you sure you want to set status to ${status}?`)) return;
-        
-        setLoading(vendorId);
+    function openModal(vendorId: number, status: 'approved' | 'rejected', vendorName: string) {
+        setModalAction({ vendorId, status, vendorName });
+        setModalOpen(true);
+    }
+
+    async function handleAction() {
+        if (!modalAction) return;
+
+        setLoading(modalAction.vendorId);
+        setModalOpen(false);
+
         try {
             const res = await fetch('/api/admin/vendors', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ vendor_id: vendorId, status })
+                body: JSON.stringify({ vendor_id: modalAction.vendorId, status: modalAction.status })
             });
 
             if (!res.ok) throw new Error('Action failed');
-            
+
             router.refresh();
         } catch (err) {
             alert('Failed to update vendor status');
         } finally {
             setLoading(null);
+            setModalAction(null);
         }
     }
 
-    return (
-        <div className="flex flex-col">
+  return (
+    <>
+    <div className="flex flex-col">
             <div className="p-4 border-b border-gray-100 bg-gray-50/50">
                 <div className="relative max-w-sm">
                     <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-4 h-4" />
@@ -68,6 +96,7 @@ export default function VendorApprovalTable({ vendors }: VendorApprovalTableProp
                             <th className="px-6 py-4 font-semibold">Vendor & Owner</th>
                             <th className="px-6 py-4 font-semibold">Regulatory Info</th>
                             <th className="px-6 py-4 font-semibold">Contact</th>
+                            <th className="px-6 py-4 font-semibold">Subscription</th>
                             <th className="px-6 py-4 font-semibold">Status</th>
                             <th className="px-6 py-4 font-semibold text-right">Actions</th>
                         </tr>
@@ -103,6 +132,27 @@ export default function VendorApprovalTable({ vendors }: VendorApprovalTableProp
                                     <div>{vendor.contact_phone}</div>
                                 </td>
                                 <td className="px-6 py-4">
+                                    <div className="text-xs">
+                                        {vendor.plan_name ? (
+                                            <>
+                                                <div className="font-medium text-gray-900">{vendor.plan_name}</div>
+                                                <div className="text-gray-500">
+                                                    {vendor.subscription_type} • ZMW {vendor.subscription_type === 'monthly' ? vendor.price_monthly : vendor.price_yearly}
+                                                </div>
+                                                <div className={`text-xs ${
+                                                    vendor.subscription_status === 'active' ? 'text-green-600' :
+                                                    vendor.subscription_status === 'expired' ? 'text-red-600' :
+                                                    'text-yellow-600'
+                                                }`}>
+                                                    {vendor.subscription_status}
+                                                </div>
+                                            </>
+                                        ) : (
+                                            <span className="text-gray-400">No subscription</span>
+                                        )}
+                                    </div>
+                                </td>
+                                <td className="px-6 py-4">
                                     <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium capitalize ${
                                         vendor.status === 'approved' ? 'bg-green-100 text-green-800' :
                                         vendor.status === 'pending' ? 'bg-yellow-100 text-yellow-800' :
@@ -115,7 +165,7 @@ export default function VendorApprovalTable({ vendors }: VendorApprovalTableProp
                                     {vendor.status === 'pending' && (
                                         <div className="flex items-center justify-end gap-2">
                                             <button
-                                                onClick={() => handleAction(vendor.id, 'approved')}
+                                                onClick={() => openModal(vendor.id, 'approved', vendor.name)}
                                                 disabled={loading === vendor.id}
                                                 className="p-2 bg-green-50 text-green-600 hover:bg-green-100 rounded-lg transition-colors disabled:opacity-50"
                                                 title="Approve"
@@ -123,7 +173,7 @@ export default function VendorApprovalTable({ vendors }: VendorApprovalTableProp
                                                 <Check className="w-4 h-4" />
                                             </button>
                                             <button
-                                                onClick={() => handleAction(vendor.id, 'rejected')}
+                                                onClick={() => openModal(vendor.id, 'rejected', vendor.name)}
                                                 disabled={loading === vendor.id}
                                                 className="p-2 bg-red-50 text-red-600 hover:bg-red-100 rounded-lg transition-colors disabled:opacity-50"
                                                 title="Reject"
@@ -148,6 +198,41 @@ export default function VendorApprovalTable({ vendors }: VendorApprovalTableProp
                     </div>
                 )}
             </div>
+
+            {/* Confirmation Modal */}
+            {modalOpen && modalAction && (
+                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+                    <div className="bg-white rounded-lg p-6 max-w-md w-full mx-4">
+                        <h3 className="text-lg font-semibold text-gray-900 mb-4">
+                            Confirm Action
+                        </h3>
+                        <p className="text-gray-600 mb-6">
+                            Are you sure you want to <strong>{modalAction.status}</strong> the vendor{' '}
+                            <strong>"{modalAction.vendorName}"</strong>?
+                        </p>
+                        <div className="flex justify-end gap-3">
+                            <button
+                                onClick={() => setModalOpen(false)}
+                                className="px-4 py-2 text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors"
+                            >
+                                Cancel
+                            </button>
+                            <button
+                                onClick={handleAction}
+                                disabled={loading === modalAction.vendorId}
+                                className={`px-4 py-2 text-white rounded-lg transition-colors ${
+                                    modalAction.status === 'approved'
+                                        ? 'bg-green-600 hover:bg-green-700'
+                                        : 'bg-red-600 hover:bg-red-700'
+                                } disabled:opacity-50`}
+                            >
+                                {loading === modalAction.vendorId ? 'Processing...' : 'Confirm'}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
-    );
+    </>
+);
 }

@@ -3,11 +3,13 @@ export interface Vendor {
     name: string;
     description: string;
     logo_url?: string;
+    pacra_number?: string;
     category: 'commercial_bank' | 'microfinance' | 'digital_lender' | 'sacco' | 'cooperative';
     address?: string;
     contact_email?: string;
     contact_phone?: string;
     website_url?: string;
+    status?: 'pending' | 'approved' | 'rejected';
     rating?: number;
     review_count?: number;
 }

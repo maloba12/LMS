@@ -1,4 +1,5 @@
 import AdminSidebar from '@/components/AdminSidebar';
+import InactivityTimeout from '@/components/InactivityTimeout';
 import { getSession } from '@/lib/auth';
 import { redirect } from 'next/navigation';
 
@@ -22,6 +23,9 @@ export default async function AdminLayout({
                     {children}
                 </main>
             </div>
+
+            {/* Inactivity timeout component */}
+            <InactivityTimeout />
         </div>
     );
 }

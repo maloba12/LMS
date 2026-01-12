@@ -107,6 +107,12 @@ const Navbar = () => {
                             Login
                         </Link>
                         <Link
+                            href="/auth/company-register"
+                            className="text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white text-sm font-bold transition mr-4"
+                        >
+                            Join as Lender
+                        </Link>
+                        <Link
                             href="/auth/register"
                             className="bg-blue-600 text-white px-8 py-3 rounded-xl text-sm font-bold hover:bg-blue-700 transition shadow-xl shadow-blue-600/20 transform hover:-translate-y-0.5 active:translate-y-0"
                         >

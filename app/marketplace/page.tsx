@@ -5,71 +5,116 @@ import { Vendor } from '@/types/marketplace';
 import { RowDataPacket } from 'mysql2';
 import Link from 'next/link';
 
+// Fake vendor data for development
+const fakeVendors: Vendor[] = [
+    {
+        id: 1,
+        name: 'Zanaco Bank',
+        description: 'Leading commercial bank in Zambia offering competitive loan rates',
+        logo_url: 'https://api.dicebear.com/7.x/initials/svg?seed=Zanaco&backgroundColor=2563eb',
+        category: 'commercial_bank',
+        address: 'Lusaka, Zambia',
+        contact_email: 'loans@zanaco.co.zm',
+        contact_phone: '+260 211 123456',
+        website_url: 'https://zanaco.co.zm',
+        rating: 4.8,
+        review_count: 1250
+    },
+    {
+        id: 2,
+        name: 'Atlas Mara Zambia',
+        description: 'Digital banking solutions with fast loan approvals',
+        logo_url: 'https://api.dicebear.com/7.x/initials/svg?seed=Atlas&backgroundColor=059669',
+        category: 'commercial_bank',
+        address: 'Lusaka, Zambia',
+        contact_email: 'loans@atlasmara.co.zm',
+        contact_phone: '+260 211 234567',
+        website_url: 'https://atlasmara.co.zm',
+        rating: 4.7,
+        review_count: 920
+    },
+    {
+        id: 3,
+        name: 'FINCA Zambia',
+        description: 'Microfinance institution specializing in SME loans',
+        logo_url: 'https://api.dicebear.com/7.x/initials/svg?seed=FINCA&backgroundColor=db2777',
+        category: 'microfinance',
+        address: 'Lusaka, Zambia',
+        contact_email: 'loans@finca.co.zm',
+        contact_phone: '+260 211 345678',
+        website_url: 'https://finca.co.zm',
+        rating: 4.4,
+        review_count: 1800
+    },
+    {
+        id: 4,
+        name: 'Bayport Zambia',
+        description: 'Salary advance loans with flexible repayment terms',
+        logo_url: 'https://api.dicebear.com/7.x/initials/svg?seed=Bayport&backgroundColor=ea580c',
+        category: 'digital_lender',
+        address: 'Lusaka, Zambia',
+        contact_email: 'loans@bayport.co.zm',
+        contact_phone: '+260 211 456789',
+        website_url: 'https://bayport.co.zm',
+        rating: 4.5,
+        review_count: 5400
+    },
+    {
+        id: 5,
+        name: 'Madison Finance',
+        description: 'Personal and business loans with competitive rates',
+        logo_url: 'https://api.dicebear.com/7.x/initials/svg?seed=Madison&backgroundColor=1d4ed8',
+        category: 'microfinance',
+        address: 'Lusaka, Zambia',
+        contact_email: 'loans@madison.co.zm',
+        contact_phone: '+260 211 567890',
+        website_url: 'https://madison.co.zm',
+        rating: 4.7,
+        review_count: 750
+    },
+    {
+        id: 6,
+        name: 'Zambia SACCO Union',
+        description: 'Cooperative lending for members with community focus',
+        logo_url: 'https://api.dicebear.com/7.x/initials/svg?seed=SACCO&backgroundColor=7c3aed',
+        category: 'sacco',
+        address: 'Lusaka, Zambia',
+        contact_email: 'loans@saccounion.co.zm',
+        contact_phone: '+260 211 678901',
+        website_url: 'https://saccounion.co.zm',
+        rating: 4.3,
+        review_count: 320
+    }
+];
+
 async function getVendors(searchParams: { [key: string]: string | string[] | undefined }) {
     const search = searchParams.search as string;
     const category = searchParams.category as string;
     const location = searchParams.location as string;
 
-    let query = `
-        SELECT id, name, description, logo_url, category, address, status 
-        FROM vendors 
-        WHERE status = 'approved'
-    `;
-    const params: any[] = [];
+    let filteredVendors = fakeVendors;
 
+    // Apply filters
     if (category) {
-        query += ` AND category = ?`;
-        params.push(category);
+        filteredVendors = filteredVendors.filter(v => v.category === category);
     }
 
     if (search) {
-        query += ` AND name LIKE ?`;
-        params.push(`%${search}%`);
-    }
-    
-    if (location) {
-        query += ` AND address LIKE ?`;
-        params.push(`%${location}%`);
+        const searchLower = search.toLowerCase();
+        filteredVendors = filteredVendors.filter(v =>
+            v.name.toLowerCase().includes(searchLower) ||
+            v.description.toLowerCase().includes(searchLower)
+        );
     }
 
-    const [rows] = await pool.query<RowDataPacket[]>(query, params);
-    
-    // Fetch ratings separately or join (simplified for now to basic query)
-    // To minimize complexity, we'll do a quick loop or subquery if performant, 
-    // or just fetch all reviews and aggregate in JS (not scalable) or join.
-    // Let's do a subquery in the main select for avg rating.
-    
-    // Refined Query with Rating:
-    /*
-    SELECT v.*, AVG(r.rating) as rating, COUNT(r.id) as review_count
-    FROM vendors v
-    LEFT JOIN vendor_reviews r ON v.id = r.vendor_id
-    WHERE v.status = 'approved'
-    ...
-    GROUP BY v.id
-    */
-   
-    let advancedQuery = `
-        SELECT v.*, AVG(r.rating) as rating, COUNT(r.id) as review_count
-        FROM vendors v
-        LEFT JOIN vendor_reviews r ON v.id = r.vendor_id
-        WHERE v.status = 'approved'
-    `;
-    
-    if (category) {
-        advancedQuery += ` AND v.category = ?`;
-    }
-    if (search) {
-        advancedQuery += ` AND v.name LIKE ?`;
-    }
     if (location) {
-        advancedQuery += ` AND v.address LIKE ?`;
+        const locationLower = location.toLowerCase();
+        filteredVendors = filteredVendors.filter(v =>
+            v.address.toLowerCase().includes(locationLower)
+        );
     }
-    
-    advancedQuery += ' GROUP BY v.id';
 
-    const [vendors] = await pool.query<RowDataPacket[]>(advancedQuery, params);
-    return vendors as Vendor[];
+    return filteredVendors;
 }
 
 export default async function MarketplacePage({

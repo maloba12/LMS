@@ -8,7 +8,7 @@ import Link from 'next/link';
 
 async function getVendorWithProducts(id: string) {
     const [vendors] = await pool.query<RowDataPacket[]>(
-        'SELECT * FROM vendors WHERE id = ?',
+        'SELECT id, name, description, logo_url, pacra_number, address, contact_email, contact_phone, website_url, category, status FROM vendors WHERE id = ? AND status = "approved"',
         [id]
     );
 

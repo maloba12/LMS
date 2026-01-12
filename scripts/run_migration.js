@@ -6,7 +6,7 @@ const dotenv = require('dotenv');
 // Load environment variables
 dotenv.config({ path: '.env.local' });
 
-async function runMigration() {
+async function runMigration(migrationFile) {
   let connection;
   try {
     console.log('Connecting to database...');
@@ -19,10 +19,15 @@ async function runMigration() {
     });
 
     console.log('Connected.');
-    
-    // Read the SQL file
-    const sqlPath = path.join(__dirname, '../sql/marketplace_migration.sql');
+
+    // Read the SQL file - accept file path from command line or use default
+    const sqlPath = migrationFile ? path.resolve(migrationFile) : path.join(__dirname, '../sql/marketplace_migration.sql');
     console.log(`Reading migration file from: ${sqlPath}`);
+
+    if (!fs.existsSync(sqlPath)) {
+      throw new Error(`Migration file not found: ${sqlPath}`);
+    }
+
     const sql = fs.readFileSync(sqlPath, 'utf8');
 
     // Execute the SQL
@@ -40,4 +45,6 @@ async function runMigration() {
   }
 }
 
-runMigration();
+// Get migration file from command line argument
+const migrationFile = process.argv[2];
+runMigration(migrationFile);

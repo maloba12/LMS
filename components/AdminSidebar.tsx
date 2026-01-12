@@ -12,6 +12,7 @@ import {
     Menu,
     Plus,
     Building2,
+    CreditCard,
     X
 } from 'lucide-react';
 import { useState } from 'react';
@@ -20,6 +21,8 @@ const menuItems = [
     { name: 'Dashboard', href: '/dashboard/admin', icon: LayoutDashboard },
     { name: 'Loan Applications', href: '/dashboard/admin/loans', icon: FileSpreadsheet },
     { name: 'Lenders / Marketplace', href: '/dashboard/admin/vendors', icon: Building2 },
+    { name: 'Manual Registration', href: '/dashboard/admin/manual-registration', icon: Plus },
+    { name: 'Subscriptions', href: '/dashboard/admin/subscriptions', icon: CreditCard },
     { name: 'Customers', href: '/dashboard/admin/users', icon: Users },
     { name: 'Documents', href: '/dashboard/admin/documents', icon: Files },
     { name: 'Reports', href: '/dashboard/admin/reports', icon: PieChart },

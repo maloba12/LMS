@@ -1,4 +1,5 @@
 import CustomerSidebar from '@/components/CustomerSidebar';
+import InactivityTimeout from '@/components/InactivityTimeout';
 import { getSession } from '@/lib/auth';
 import { redirect } from 'next/navigation';
 
@@ -22,6 +23,9 @@ export default async function CustomerLayout({
                     {children}
                 </main>
             </div>
+
+            {/* Inactivity timeout component */}
+            <InactivityTimeout />
         </div>
     );
 }

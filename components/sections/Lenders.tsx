@@ -11,8 +11,8 @@ interface LendersProps {
 const Lenders = ({ searchQuery, loanType }: LendersProps) => {
     const lenders = [
         {
-            name: 'Zanaco (Zambia National Commercial Bank)',
-            logo: 'https://api.dicebear.com/7.x/initials/svg?seed=ZN&backgroundColor=2563eb',
+            name: 'Zanaco Bank',
+            logo: 'https://api.dicebear.com/7.x/initials/svg?seed=Zanaco&backgroundColor=2563eb',
             rating: 4.8,
             reviews: 1250,
             types: ['Business', 'Personal', 'Salary'],
@@ -21,7 +21,7 @@ const Lenders = ({ searchQuery, loanType }: LendersProps) => {
         },
         {
             name: 'Atlas Mara Zambia',
-            logo: 'https://api.dicebear.com/7.x/initials/svg?seed=AM&backgroundColor=059669',
+            logo: 'https://api.dicebear.com/7.x/initials/svg?seed=Atlas&backgroundColor=059669',
             rating: 4.7,
             reviews: 920,
             types: ['Business', 'Salary', 'Emergency'],
@@ -29,26 +29,8 @@ const Lenders = ({ searchQuery, loanType }: LendersProps) => {
             speed: '48h'
         },
         {
-            name: 'Izwe Loans Zambia',
-            logo: 'https://api.dicebear.com/7.x/initials/svg?seed=IL&backgroundColor=7c3aed',
-            rating: 4.6,
-            reviews: 3100,
-            types: ['Salary', 'SME', 'Civil Servant'],
-            minRate: '25%',
-            speed: '12h'
-        },
-        {
-            name: 'Bayport Financial Services',
-            logo: 'https://api.dicebear.com/7.x/initials/svg?seed=BP&backgroundColor=ea580c',
-            rating: 4.5,
-            reviews: 5400,
-            types: ['Salary', 'Government', 'Personal'],
-            minRate: '22%',
-            speed: '24h'
-        },
-        {
             name: 'FINCA Zambia',
-            logo: 'https://api.dicebear.com/7.x/initials/svg?seed=FZ&backgroundColor=db2777',
+            logo: 'https://api.dicebear.com/7.x/initials/svg?seed=FINCA&backgroundColor=db2777',
             rating: 4.4,
             reviews: 1800,
             types: ['Microfinance', 'Business', 'Emergency'],
@@ -56,13 +38,31 @@ const Lenders = ({ searchQuery, loanType }: LendersProps) => {
             speed: '24h'
         },
         {
+            name: 'Bayport Zambia',
+            logo: 'https://api.dicebear.com/7.x/initials/svg?seed=Bayport&backgroundColor=ea580c',
+            rating: 4.5,
+            reviews: 5400,
+            types: ['Salary', 'Government', 'Personal'],
+            minRate: '22%',
+            speed: '24h'
+        },
+        {
             name: 'Madison Finance',
-            logo: 'https://api.dicebear.com/7.x/initials/svg?seed=MF&backgroundColor=1d4ed8',
+            logo: 'https://api.dicebear.com/7.x/initials/svg?seed=Madison&backgroundColor=1d4ed8',
             rating: 4.7,
             reviews: 750,
             types: ['Business', 'SME', 'Personal'],
             minRate: '23%',
             speed: '48h'
+        },
+        {
+            name: 'Zambia SACCO Union',
+            logo: 'https://api.dicebear.com/7.x/initials/svg?seed=SACCO&backgroundColor=7c3aed',
+            rating: 4.3,
+            reviews: 320,
+            types: ['Cooperative', 'Business', 'Personal'],
+            minRate: '19%',
+            speed: '36h'
         }
     ];
 

@@ -11,10 +11,14 @@ export async function GET(req: NextRequest) {
         }
 
         const [vendors] = await pool.query<RowDataPacket[]>(
-            `SELECT v.*, u.full_name as owner_name 
+            `SELECT v.*, u.full_name as owner_name, u.email as owner_email,
+             s.plan_id, s.subscription_type, s.start_date, s.end_date, s.status as subscription_status,
+             sp.name as plan_name, sp.price_monthly, sp.price_yearly
              FROM vendors v
              JOIN users u ON v.user_id = u.id
-             ORDER BY v.created_at DESC`
+             LEFT JOIN company_subscriptions s ON v.subscription_id = s.id
+             LEFT JOIN subscription_plans sp ON s.plan_id = sp.id
+             ORDER BY v.status ASC, v.created_at DESC`
         );
 
         return NextResponse.json(vendors);
