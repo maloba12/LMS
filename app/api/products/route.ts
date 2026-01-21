@@ -2,27 +2,31 @@ import { NextRequest, NextResponse } from 'next/server';
 import pool from '@/lib/db';
 import { getSession } from '@/lib/auth';
 import { RowDataPacket, ResultSetHeader } from 'mysql2';
+import { DirectusService } from '@/lib/directus-service';
 
 export async function GET(req: NextRequest) {
     try {
-        const { searchParams } = new URL(req.url);
-        const vendor_id = searchParams.get('vendor_id');
+        // Fetch products from Directus (New Source of Truth for Metadata/Config)
+        const products = await DirectusService.getLoanProducts();
 
-        let query = 'SELECT * FROM loan_products WHERE is_active = TRUE';
-        const params: any[] = [];
-
-        if (vendor_id) {
-            query += ' AND vendor_id = ?';
-            params.push(vendor_id);
-        }
-
-        const [rows] = await pool.query<RowDataPacket[]>(query, params);
-        return NextResponse.json(rows);
+        // ✅ Keep this line as-is
+        return NextResponse.json(products);
 
     } catch (error) {
-        return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+        console.error('Directus GET error:', error);
+
+        // Fallback to local DB if Directus is down or not configured
+        try {
+            const [rows] = await pool.query<RowDataPacket[]>(
+                'SELECT * FROM loan_products WHERE is_active = TRUE'
+            );
+            return NextResponse.json(rows);
+        } catch (dbError) {
+            return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+        }
     }
 }
+
 
 export async function POST(req: NextRequest) {
     try {

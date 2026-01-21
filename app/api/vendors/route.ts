@@ -2,46 +2,26 @@ import { NextRequest, NextResponse } from 'next/server';
 import pool from '@/lib/db';
 import { getSession } from '@/lib/auth';
 import { RowDataPacket, ResultSetHeader } from 'mysql2';
+import { DirectusService } from '@/lib/directus-service';
 
 export async function GET(req: NextRequest) {
     try {
-        const { searchParams } = new URL(req.url);
-        const category = searchParams.get('category');
-        const search = searchParams.get('search');
-        const location = searchParams.get('location'); // Checking address for now
-
-        let query = `
-            SELECT id, name, description, logo_url, category, address, interest_rate_range, status 
-            FROM vendors 
-            WHERE status = 'approved'
-        `;
-        const params: any[] = [];
-
-        if (category) {
-            query += ` AND category = ?`;
-            params.push(category);
-        }
-
-        if (search) {
-            query += ` AND name LIKE ?`;
-            params.push(`%${search}%`);
-        }
-        
-        if (location) {
-             query += ` AND address LIKE ?`;
-             params.push(`%${location}%`);
-        }
-
-        // We might want to compute min/max interest rates from products dynamically, simplified for now
-        // Or we can join loan_products to get rate ranges.
-        // Let's stick to basic vendor data first.
-
-        const [rows] = await pool.query<RowDataPacket[]>(query, params);
-
-        return NextResponse.json(rows);
+        // Fetch vendors from Directus (Content & Metadata Source)
+        const vendors = await DirectusService.getVendors();
+        return NextResponse.json(vendors);
     } catch (error) {
-        console.error('Error fetching vendors:', error);
-        return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+        console.error('Error fetching vendors from Directus:', error);
+        // Fallback to local DB
+        try {
+            const [rows] = await pool.query<RowDataPacket[]>(`
+                SELECT id, name, description, logo_url, category, address, status 
+                FROM vendors 
+                WHERE status = 'approved'
+            `);
+            return NextResponse.json(rows);
+        } catch (dbError) {
+            return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+        }
     }
 }
 
@@ -101,6 +81,19 @@ export async function POST(req: NextRequest) {
             );
 
             await connection.commit();
+
+            // Notify Directus for Admin Workflow/Approval
+            try {
+                await DirectusService.createNotification({
+                    title: 'New Vendor Application',
+                    message: `Vendor "${name}" has applied for an account.`,
+                    type: 'vendor_application',
+                    user_id: String(session.userId)
+                });
+            } catch (notifyError) {
+                console.warn('Failed to notify Directus:', notifyError);
+                // Don't fail the whole request if Directus notification fails
+            }
 
             return NextResponse.json({ message: 'Vendor application submitted', vendorId: result.insertId }, { status: 201 });
 

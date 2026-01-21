@@ -141,6 +141,26 @@ export async function POST(request: Request) {
         );
 
         await connection.commit();
+
+        // Notify Directus
+        try {
+             // We can check if we have a loan product name to include in the message
+             let productInfo = '';
+             if (loan_product_id) {
+                 productInfo = ` (Product ID: ${loan_product_id})`; 
+             }
+             
+             const { DirectusService } = await import('@/lib/directus-service');
+             await DirectusService.createNotification({
+                title: 'New Loan Application',
+                message: `User ${session.userId} applied for K${amount}${productInfo}.`,
+                type: 'loan_application',
+                user_id: String(session.userId)
+             });
+        } catch (notifyError) {
+             console.warn('Failed to notify Directus:', notifyError);
+        }
+
         return NextResponse.json({ message: 'Loan application submitted successfully' }, { status: 201 });
     } catch (error) {
         await connection.rollback();

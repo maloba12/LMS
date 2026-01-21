@@ -6,9 +6,13 @@ import VendorApprovalTable from '@/components/VendorApprovalTable';
 
 async function getAllVendors() {
     const [vendors] = await pool.query<RowDataPacket[]>(
-        `SELECT v.*, u.full_name as owner_name, u.email as owner_email
+        `SELECT v.*, u.full_name as owner_name, u.email as owner_email,
+                sp.name as plan_name, sp.price_monthly, sp.price_yearly,
+                s.subscription_type, s.status as subscription_status
          FROM vendors v
          JOIN users u ON v.user_id = u.id
+         LEFT JOIN company_subscriptions s ON v.id = s.vendor_id AND s.status != 'cancelled'
+         LEFT JOIN subscription_plans sp ON s.plan_id = sp.id
          ORDER BY v.status ASC, v.created_at DESC`
     );
     return vendors;

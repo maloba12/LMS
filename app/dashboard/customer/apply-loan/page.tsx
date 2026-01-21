@@ -54,20 +54,20 @@ function ApplyLoanForm() {
     }, []);
 
     useEffect(() => {
-        if (form.vendor_id) {
-            fetch(`/api/products?vendor_id=${form.vendor_id}`)
-                .then(r => r.json())
-                .then(data => {
-                    if (Array.isArray(data)) setProducts(data);
-                    else setProducts([]);
-                })
-                .catch(err => {
-                    console.error(err);
-                    setProducts([]);
-                });
-        } else {
-            setProducts([]);
-        }
+        const url = form.vendor_id 
+            ? `/api/products?vendor_id=${form.vendor_id}`
+            : '/api/products'; // Fetch all if no vendor selected (Global)
+
+        fetch(url)
+            .then(r => r.json())
+            .then(data => {
+                if (Array.isArray(data)) setProducts(data);
+                else setProducts([]);
+            })
+            .catch(err => {
+                console.error(err);
+                setProducts([]);
+            });
     }, [form.vendor_id]);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
@@ -177,11 +177,13 @@ function ApplyLoanForm() {
                                 value={form.loan_product_id}
                                 onChange={handleChange}
                                 className="w-full rounded-lg border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500 border p-2 text-sm text-black"
-                                disabled={!form.vendor_id}
                             >
                                 <option value="">General Purpose Loan</option>
                                 {Array.isArray(products) && products.map(p => (
-                                    <option key={p.id} value={p.id}>{p.name} ({p.interest_rate}%)</option>
+                                    <option key={p.id} value={p.id}>
+                                        {p.name} ({p.interest_rate}%) 
+                                        {!form.vendor_id ? ` - ${(vendors.find(v => v.id === p.vendor_id)?.name || 'Unknown Vendor')}` : ''}
+                                    </option>
                                 ))}
                             </select>
                         </div>

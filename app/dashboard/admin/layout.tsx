@@ -1,3 +1,4 @@
+import AdminHeader from '@/components/AdminHeader';
 import AdminSidebar from '@/components/AdminSidebar';
 import InactivityTimeout from '@/components/InactivityTimeout';
 import { getSession } from '@/lib/auth';
@@ -18,8 +19,9 @@ export default async function AdminLayout({
         <div className="min-h-screen bg-gray-100 flex">
             <AdminSidebar />
 
-            <div className="flex-1 lg:ml-64 transition-all duration-300">
-                <main className="p-4 lg:p-8 pt-16 lg:pt-8">
+            <div className="flex-1 lg:ml-64 transition-all duration-300 relative">
+                <AdminHeader />
+                <main className="p-4 lg:p-8 pt-20 lg:pt-24">
                     {children}
                 </main>
             </div>
